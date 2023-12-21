@@ -7,7 +7,7 @@
 
 ## Details
 
-It is set to start C: 
+It is set to start at C: folder
 
 It will go through everything in the system
   
