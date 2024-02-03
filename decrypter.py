@@ -8,9 +8,8 @@ os.chdir("C:/")
 
 
 def decrypt():
-    with open("DecrypterKey.txt", "r") as KeyCode:
-        secret_key = KeyCode.read()
-        
+    secret_key = ""
+
     for _ in os.listdir():
         if _ == '.DS_Store':
             continue
@@ -20,9 +19,8 @@ def decrypt():
 
         with open(_, "rb") as the_file:
             contents = the_file.read()
-    
+
         contents_decrypted = Fernet(secret_key).decrypt(contents)
-    
+
         with open(_, "wb") as the_file:
             the_file.write(contents_decrypted)
-    
