@@ -7,7 +7,7 @@
 
 ## Details
 
-It is set to start at C: folder
+It is set to start at C: folder [ /Users or / on a Mac ]
 
 It will go through everything in the system
   
