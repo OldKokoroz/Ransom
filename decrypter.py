@@ -10,7 +10,7 @@ os.chdir("C:/")
 def decrypt():
     secret_key = ""
 
-    for _ in os.listdir():
+    for _ in files:
         if _ == '.DS_Store':
             continue
 
