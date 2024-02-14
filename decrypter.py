@@ -6,10 +6,10 @@ files_dict = {}
 files = []
 os.chdir("C:/")
 
+secret_key = ""
+
 
 def decrypt():
-    secret_key = ""
-
     for _ in files:
         if _ == '.DS_Store':
             continue
