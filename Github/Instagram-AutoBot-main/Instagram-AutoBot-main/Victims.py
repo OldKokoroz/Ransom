@@ -1,2 +1,0 @@
-
-victim_list = ["mosalah"]
