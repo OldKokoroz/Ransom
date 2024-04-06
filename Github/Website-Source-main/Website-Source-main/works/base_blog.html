@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1e1e1e;
+            color: #00ff00;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #content {
+            width: calc(70% - 20px);
+            /* Subtract 20px to account for padding */
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .blog-post {
+            width: 100%;
+            margin: 20px 0;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
+            text-align: left;
+        }
+
+        .blog-post img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .blog-post h2 {
+            color: #00ff00;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .blog-post p {
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        #toc {
+            width: calc(30% - 20px);
+            /* Subtract 20px to account for padding */
+            position: sticky;
+            top: 20px;
+            background-color: rgba(51, 51, 51, 0); /* Full transparency */
+            padding: 10px;
+            border-left: 1px solid #555;
+            overflow-y: auto;
+            max-height: calc(100vh - 40px);
+        }
+
+        #toc h3 {
+            color: #fff;
+        }
+
+        #toc ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        #toc a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        #toc a:hover {
+            color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="content">
+        <div class="blog-post" id="post1">
+            <img src="" alt="">
+            <h1 align="center"></h1>
+            <p>
+                <h3 id=""></h3><br>
+
+                <h3 id=""></h3><br>
+            </p>
+        </div>
+    </div>
+
+    <div id="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#"></a></li><br>
+            <li><a href="#"></a></li>
+            <!-- Add more links for each blog post -->
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

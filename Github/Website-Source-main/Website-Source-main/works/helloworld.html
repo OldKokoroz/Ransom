@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1e1e1e;
+            color: #00ff00;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #content {
+            width: calc(70% - 20px);
+            /* Subtract 20px to account for padding */
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .blog-post {
+            width: 100%;
+            margin: 20px 0;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
+            text-align: left;
+        }
+
+        .blog-post img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .blog-post h2 {
+            color: #00ff00;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .blog-post p {
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        #toc {
+            width: calc(30% - 20px);
+            /* Subtract 20px to account for padding */
+            position: sticky;
+            top: 20px;
+            background-color: rgba(51, 51, 51, 0); /* Full transparency */
+            padding: 10px;
+            border-left: 1px solid #555;
+            overflow-y: auto;
+            max-height: calc(100vh - 40px);
+        }
+
+        #toc h3 {
+            color: #fff;
+        }
+
+        #toc ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        #toc a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        #toc a:hover {
+            color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="content">
+        <div class="blog-post" id="post1">
+            <img src="" alt="">
+            <h1 align="center">Hello World</h1>
+            <p>
+                <h3 id="me">Me</h3><br>
+                Hi, I'm a Cyber Security Analyst born in İstanbul. During my childhood I had the opportunity to have contact with technology by using PCs I built and that made me want to be in hacking field very early.<br> 
+                I made my first VPN and hacked Schools network to use schools Laptops how I want.<br>  
+                After teachers heard this they called me every day to open blocked sites/apps that they can't access and with other thing I'd done I became famous in my school.<br>  
+                That was the first enjoyment I had with hacking.<br><br><br> 
+                
+                <h3 id="mysetup">My Setup</h3><br>
+                My setup is actually a little complicated. I have a Macbook Air 8 Gb Ram 1 TB SSD with an M1 chip as my main Device <br> 
+                        (I run Ubuntu, Kali and Windows 11 as Virtual Machines on UTM because Virtualbox has issues with M1 chip to work on.) <br> 
+                I  also have a Windows 11 Desktop I built using Nvidia GeForce RTX 4060TI, Kingston 16GB Ram, Intel I5-13400F Cpu on Gigabyte H610M-S2H-DDR4 motherboard. <br> 
+                On the other side I run Windows Distros, Servers (Apache, Ngingx...) on Virtualbox for my security researches.<br> 
+                To learn more about my projects, visit my Github profile or the Projects page of this website.<br> 
+            </p>
+        </div>
+    </div>
+
+    <div id="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#me">Me</a></li><br>
+            <li><a href="#mysetup">My Setup</a></li>
+            <!-- Add more links for each blog post -->
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
