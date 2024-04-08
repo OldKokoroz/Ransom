@@ -4,9 +4,9 @@ from cryptography.fernet import Fernet
 
 class Decrypter:
     def __init__(self,
-                secret_key,
-                files_dict,
-                files
+                secret_key="",
+                files_dict={},
+                files=[]
                 ) -> None:
         
         self.secret_key = secret_key
